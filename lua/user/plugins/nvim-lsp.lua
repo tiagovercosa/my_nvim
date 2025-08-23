@@ -1,0 +1,68 @@
+---@diagnostic disable: undefined-global
+
+return {
+    'neovim/nvim-lspconfig',
+    dependencies = {
+        'williamboman/mason.nvim',
+        'williamboman/mason-lspconfig.nvim',
+    },
+    config = function()
+        local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+        local mason = require("mason")
+        local mason_lspconfig = require("mason-lspconfig")
+        local lspconfig = require("lspconfig")
+
+        mason.setup()
+        mason_lspconfig.setup({
+          ensure_installed = { 'clangd', 'pyright', 'fortls', 'lua_ls' },
+          automatic_installation = true,
+        })
+        -- Função on_attach para mapear atalhos LSP por buffer
+        local function on_attach(client, bufnr)
+          vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+          local bufmap = function(mode, lhs, rhs, desc)
+            vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = 'LSP: ' .. desc })
+          end
+
+          bufmap('n', 'gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+          bufmap('n', 'K',  vim.lsp.buf.hover, 'Hover Documentation')
+          bufmap('n', 'rn', vim.lsp.buf.rename, '[G]oto [R]ename')
+          bufmap('n', 'gr', vim.lsp.buf.references, '[G]oto [R]eferences')
+          bufmap('n', 'ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+        end
+
+        local default_config = {
+          on_attach = on_attach,
+          capabilities = capabilities,
+        }
+        local servers = { 'clangd', 'pyright', 'fortls', 'texlab' }
+        for _, server in ipairs(servers) do
+          lspconfig[server].setup(default_config)
+        end
+
+        do
+          -- Clona a configuração padrão para não afetar os outros servidores
+          local texlab_config = vim.deepcopy(default_config)
+          -- Desativa a capacidade de snippets especificamente para o texlab
+          if texlab_config.capabilities.textDocument.completion.completionItem then
+             texlab_config.capabilities.textDocument.completion.completionItem.snippetSupport = false
+          end
+          -- Inicia o texlab com a configuração modificada
+          lspconfig.texlab.setup(texlab_config)
+        end
+
+        -- Configuração específica para lua_ls
+        lspconfig.lua_ls.setup(vim.tbl_extend('force', default_config, {
+          settings = {
+            Lua = {
+              diagnostics = {
+                globals = { 'vim' },
+              },
+            },
+          },
+        }))
+    end,
+}
+
