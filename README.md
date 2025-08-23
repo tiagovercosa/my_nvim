@@ -1,2 +1,2 @@
-# my_nvim
+# My config files for Neovim
 My config files for Neovim
