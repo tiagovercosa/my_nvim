@@ -2,21 +2,25 @@
 return {
     'L3MON4D3/LuaSnip',
     version = "v2.*",
-    event = "InsertEnter",
     build = "make install_jsregexp",
-    -- dependencies = { 'iurimateus/luasnip-latex-snippets.nvim' },
+    dependencies = { 'iurimateus/luasnip-latex-snippets.nvim' },
     config = function()
-      require('luasnip').config.setup {
-        enable_autosnippets = true
-      }
+        local ls = require("luasnip")
 
-      require("user.snippets.tex")
+        require('luasnip-latex-snippets').setup({
+            use_treesitter = true,
+            allow_on_markdown = true,
+        })
 
-      -- require('luasnip-latex-snippets').setup({
-      --     use_treesitter = false,
-      --     allow_on_markdown = true,
-      -- })
-
+        ls.config.setup({
+          enable_autosnippets = true,
+          -- OPTIONAL: remover para usar as defaults
+          update_events = "TextChanged,TextChangedI",
+          delete_check_events = "TextChanged",
+        })
+        require("luasnip.loaders.from_lua").load({
+          paths = vim.fn.stdpath("config") .. "/lua/user/snippets"
+        })
     end
 }
 
