@@ -14,10 +14,7 @@ return {
         local lspconfig = require("lspconfig")
 
         mason.setup()
-        mason_lspconfig.setup({
-          ensure_installed = { 'clangd', 'pyright', 'fortls', 'lua_ls' },
-          automatic_installation = true,
-        })
+
         -- Função on_attach para mapear atalhos LSP por buffer
         local function on_attach(client, bufnr)
           vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -33,36 +30,49 @@ return {
           bufmap('n', 'ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
         end
 
+        -- Configuração padrão a ser usada pela maioria dos servidores
         local default_config = {
           on_attach = on_attach,
           capabilities = capabilities,
         }
-        local servers = { 'clangd', 'pyright', 'fortls', 'texlab' }
-        for _, server in ipairs(servers) do
-          lspconfig[server].setup(default_config)
-        end
 
-        do
-          -- Clona a configuração padrão para não afetar os outros servidores
-          local texlab_config = vim.deepcopy(default_config)
-          -- Desativa a capacidade de snippets especificamente para o texlab
-          if texlab_config.capabilities.textDocument.completion.completionItem then
-             texlab_config.capabilities.textDocument.completion.completionItem.snippetSupport = false
-          end
-          -- Inicia o texlab com a configuração modificada
-          lspconfig.texlab.setup(texlab_config)
-        end
+        mason_lspconfig.setup({
+          ensure_installed = { 'clangd', 'pyright', 'fortls', 'lua_ls', 'texlab' },
+          automatic_installation = true,
+          handlers = {
+              -- Handler padrão para servidores que não precisam de configuração especial.
+              -- Isso vai cuidar de clangd, pyright, e fortls.
+              function (server_name)
+                lspconfig[server_name].setup(default_config)
+              end,
 
-        -- Configuração específica para lua_ls
-        lspconfig.lua_ls.setup(vim.tbl_extend('force', default_config, {
-          settings = {
-            Lua = {
-              diagnostics = {
-                globals = { 'vim' },
-              },
-            },
-          },
-        }))
+              -- Handler específico para texlab
+              texlab = function ()
+                -- Clona a configuração padrão para não afetar os outros servidores
+                local texlab_config = vim.deepcopy(default_config)
+                -- Desativa a capacidade de snippets especificamente para o texlab
+                if texlab_config.capabilities.textDocument.completion.completionItem then
+                   texlab_config.capabilities.textDocument.completion.completionItem.snippetSupport = false
+                end
+                -- Inicia o texlab com a configuração modificada
+                lspconfig.texlab.setup(texlab_config)
+              end,
+
+              -- Handler específico para lua_ls
+              lua_ls = function ()
+                -- Usa a configuração padrão e adiciona as configurações específicas do lua_ls
+                lspconfig.lua_ls.setup(vim.tbl_extend('force', default_config, {
+                  settings = {
+                    Lua = {
+                      diagnostics = {
+                        globals = { 'vim' },
+                      },
+                    },
+                  },
+                }))
+              end
+          }
+        })
     end,
 }
 
