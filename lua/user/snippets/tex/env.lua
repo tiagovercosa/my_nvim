@@ -12,14 +12,6 @@ end
 local fmta = fmt_mod.fmta
 
 ------------------------------------------------------------
--- Utilidades de formatação de snippet
-------------------------------------------------------------
-local function trim_spaces(args)
-  local text = args[1][1] or ""
-  return (text:gsub("%s+", " "))
-end
-
-------------------------------------------------------------
 -- Definição dos snippets
 ------------------------------------------------------------
 local snippets = {
