@@ -1,4 +1,4 @@
-require('user.options')
-require('user.keymaps')
-require('user.lazy')
+require('vim-options')
+require('vim-keymaps')
+require('config.lazy')
 

@@ -3,9 +3,7 @@
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
-
 -- Define a tecla Leader (geralmente '\' ou ',')
--- IMPORTANTE: Defina antes de qualquer mapeamento que a utilize
 vim.g.mapleader = ','             -- Define a tecla Leader como "espaço".
 vim.g.maplocalleader = ','	      -- Define a tecla Local Leader como "espaço".
 
@@ -27,9 +25,6 @@ map('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic mes
 map('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnostic message" })
 map('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 
--- O atalho global para abrir o nvim-tree
-map("n", "<leader>t", ":NvimTreeToggle<CR>", { desc = "Abrir explorador de arquivos" })
-
 map('i', '<C-a>', '<c-g>u<Esc>[s1z=`]a<c-g>u', {
   noremap = true,
   silent = true,
@@ -49,7 +44,6 @@ map('n', '\\lt',  '<cmd>VimtexTocToggle<CR>', opts)      -- Toggle table of cont
 -- Navegação em LaTeX
 map('n', ']]', '<cmd>VimtexNextEnv<CR>', opts)           -- Próximo ambiente LaTeX
 map('n', '[[', '<cmd>VimtexPrevEnv<CR>', opts)           -- Ambiente anterior
-
 map('n', ']m', '<cmd>VimtexNextSection<CR>', opts)       -- Próxima seção
 map('n', '[m', '<cmd>VimtexPrevSection<CR>', opts)       -- Seção anterior
 
