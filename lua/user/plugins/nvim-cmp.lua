@@ -3,11 +3,14 @@ return {
     event = "InsertEnter", -- Carrega o plugin ao entrar no modo de inserção
     dependencies = {
         'windwp/nvim-autopairs',
+        'hrsh7th/cmp-cmdline',
+        'hrsh7th/cmp-nvim-lsp-signature-help',
         'hrsh7th/cmp-nvim-lsp',   -- Fonte de sugestões para o LSP
         'hrsh7th/cmp-buffer',     -- Fonte para palavras do buffer atual
         'hrsh7th/cmp-path',       -- Fonte para caminhos de arquivos
         'L3MON4D3/LuaSnip',       -- Engine de Snippets (modelos de código)
         'saadparwaiz1/cmp_luasnip', -- Integração entre cmp e luasnip
+        'onsails/lspkind.nvim',   -- ícones visuais
     },
     config = function()
         local cmp_status_ok, cmp = pcall(require, 'cmp')
@@ -21,6 +24,7 @@ return {
         end
 
         local autopairs_cmp = require('nvim-autopairs.completion.cmp')
+        local lspkind = require('lspkind')
 
         cmp.setup({
           snippet = {
@@ -31,9 +35,16 @@ return {
           sources = cmp.config.sources({
             { name = 'luasnip' },
             { name = 'nvim_lsp' },
+            { name = 'nvim_lsp_signature_help' },
             { name = 'buffer' },
             { name = 'path' },
           }),
+          window = {
+              completion = cmp.config.window.bordered(),
+              documentation = {
+                  border = 'double',
+              },
+          },
           mapping = cmp.mapping.preset.insert({
             ['<C-d>'] = cmp.mapping.scroll_docs(-4),
             ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -69,17 +80,11 @@ return {
           }),
           formatting = {
               fields = { "kind", "abbr", "menu" },
-              format = function(entry, vim_item)
-                  -- Kind icons
-                  vim_item.kind = string.format('%s', vim_item.kind)
-                  vim_item.menu = ({
-                      nvim_lsp = '[LSP]',
-                      luasnip = '[Snippet]',
-                      buffer = '[Buffer]',
-                      path = '[Path]',
-                  })[entry.source.name]
-                  return vim_item
-              end,
+              format = lspkind.cmp_format({
+                  mode = 'symbol_text',
+                  maxwidth = 50,
+                  ellipsis_char = '...',
+              }),
           },
         })
         cmp.event:on('confirm_done', autopairs_cmp.on_confirm_done())
