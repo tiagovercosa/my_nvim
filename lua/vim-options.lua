@@ -41,11 +41,11 @@ vim.api.nvim_create_autocmd({"FocusGained","BufEnter","CursorHold","CursorHoldI"
 })
 
 vim.cmd [[
-	filetype on                   " enable filetype detection
-	filetype plugin on            " load file-specific plugins
-	filetype indent on            " load file-specific indentation
+  filetype on                   " enable filetype detection
+  filetype plugin on            " load file-specific plugins
+  filetype indent on            " load file-specific indentation
 
-	set whichwrap+=<,>,[,],h,l
+  set whichwrap+=<,>,[,],h,l
 ]]
 
 -- Cria diretório de backup caso não exista
@@ -53,19 +53,19 @@ local backup_dir = vim.fn.stdpath('cache') .. '/backup'
 vim.opt.backupdir = backup_dir
 
 if not vim.fn.isdirectory(backup_dir) then
-    vim.fn.mkdir(backup_dir, 'p')
+  vim.fn.mkdir(backup_dir, 'p')
 end
 
 -- Configura a aparência dos diagnósticos
 vim.diagnostic.config({
   virtual_text = {
-      spacing = 4,
-      prefix = '●',
-      severity = { min = vim.diagnostic.severity.WARN },
+    spacing = 4,
+    prefix = '●',
+    severity = { min = vim.diagnostic.severity.WARN },
   },
   float = {
-      border = "rounded",
-      source = "always",
+    border = "rounded",
+    source = "always",
   },
   underline = true,
   update_in_insert = false,

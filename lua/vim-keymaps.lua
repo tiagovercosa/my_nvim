@@ -31,7 +31,6 @@ map('i', '<C-a>', '<c-g>u<Esc>[s1z=`]a<c-g>u', {
   desc = 'Corrige a palavra anterior com a primeira sugestão'
 })
 
-
 -- Atalhos do VimTeX (prefixo \)
 map('n', '\\ll',  '<cmd>VimtexCompile<CR>', opts)        -- Compilar
 map('n', '\\lk',  '<cmd>VimtexStopCompile<CR>', opts)    -- Parar compilação
