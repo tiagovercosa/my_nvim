@@ -39,7 +39,7 @@ return {
     }
 
     mason_lspconfig.setup({
-      ensure_installed = { 'clangd', 'pyright', 'ruff_lsp', 'fortls', 'lua_ls', 'texlab' },
+      ensure_installed = { 'clangd', 'pyright', 'ruff', 'fortls', 'lua_ls', 'texlab' },
       automatic_installation = true,
       handlers = {
         -- Handler padrão para servidores que não precisam de configuração especial.
