@@ -39,7 +39,7 @@ return {
     }
 
     mason_lspconfig.setup({
-      ensure_installed = { 'clangd', 'pyright', 'fortls', 'lua_ls', 'texlab' },
+      ensure_installed = { 'clangd', 'pyright', 'ruff_lsp', 'fortls', 'lua_ls', 'texlab' },
       automatic_installation = true,
       handlers = {
         -- Handler padrão para servidores que não precisam de configuração especial.
@@ -58,6 +58,19 @@ return {
           end
           -- Inicia o texlab com a configuração modificada
           lspconfig.texlab.setup(texlab_config)
+        end,
+
+        ruff_lsp = function()
+          lspconfig.ruff_lsp.setup(vim.tbl_extend('force', default_config, {
+            init_options = {
+              settings = {
+                args = {
+                  "--select=E,W,F,I,N,B,A,C,T,S",
+                  "--ignore=E501", -- Ignora linha muito longa (exemplo)
+                },
+              }
+            }
+          }))
         end,
 
         -- Handler específico para lua_ls
