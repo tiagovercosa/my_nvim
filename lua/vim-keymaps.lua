@@ -7,11 +7,6 @@ local opts = { noremap = true, silent = true }
 vim.g.mapleader = ','             -- Define a tecla Leader como "espaço".
 vim.g.maplocalleader = ','	      -- Define a tecla Local Leader como "espaço".
 
-map('n', '<C-h>', '<C-w>h', { desc = "Move to left window" })
-map('n', '<C-j>', '<C-w>j', { desc = "Move to down window" })
-map('n', '<C-k>', '<C-w>k', { desc = "Move to up window" })
-map('n', '<C-l>', '<C-w>l', { desc = "Move to right window" })
-
 -- Navegar entre buffers
 map('n', '<S-l>', ':bnext<CR>', { desc = "Next buffer" })
 map('n', '<S-h>', ':bprevious<CR>', { desc = "Previous buffer" })
@@ -54,5 +49,4 @@ map('n', '<leader>l', ':bnext<CR>', opts)
 map('n', '<leader>h', ':bprev<CR>', opts)
 map('n', '<leader>q', ':bdelete<CR>', opts)
 map('n', '<leader><tab>', ':buffer #<CR>', opts)
-map('n', '<leader>b', ':buffers<CR>', opts)
 
