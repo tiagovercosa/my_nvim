@@ -19,7 +19,7 @@ return {
   ),
 
   s({ trig = "bf", snippetType = "autosnippet", wordTrig = true, condition = tex.in_math },
-   fmta("\\bm{<>} ", { i(1) })
+   fmta("\\mathbf{<>} ", { i(1) })
   ),
 
 }
