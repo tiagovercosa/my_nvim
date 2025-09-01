@@ -8,9 +8,9 @@ return {
       'saadparwaiz1/cmp_luasnip',
     },
     config = function()
-      require("luasnip.loaders.from_lua").load({
-        paths = vim.fn.stdpath("config") .. "/lua/snippets"
-      })
+      require("luasnip.loaders.from_lua").lazy_load(
+        { paths = "~/.config/nvim/lua/snippets/" }
+      )
 
       require("luasnip").config.setup({
         enable_autosnippets = true,
