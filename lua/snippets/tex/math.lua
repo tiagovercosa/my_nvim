@@ -27,14 +27,12 @@ return {
   s({ trig = "dm", snippetType = "autosnippet" },
     fmta(
       [[
-      $$
+      \[
         <>
-      $$.
-      <>
+      \].
       ]],
       {
         d(1, get_visual),
-        i(0)
       }
     )
   ),
