@@ -8,7 +8,5 @@ return {
       fast_wrap = {},  -- habilita wrap rápido
       disable_filetype = { "TelescopePrompt", "spectre_panel" },
     })
-
   end,
 }
-
