@@ -4,12 +4,21 @@ local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 -- Define a tecla Leader (geralmente '\' ou ',')
-vim.g.mapleader = ','             -- Define a tecla Leader como "espaço".
-vim.g.maplocalleader = ','	      -- Define a tecla Local Leader como "espaço".
+vim.g.mapleader = ','
+vim.g.maplocalleader = ','
+
+map('n', '<leader>pv', vim.cmd.Ex)
+
+map('n', '<C-h>', '<C-w>h', { desc = "Move to left window" })
+map('n', '<C-j>', '<C-w>j', { desc = "Move to down window" })
+map('n', '<C-k>', '<C-w>k', { desc = "Move to up window" })
+map('n', '<C-l>', '<C-w>l', { desc = "Move to right window" })
 
 -- Navegar entre buffers
 map('n', '<S-l>', ':bnext<CR>', { desc = "Next buffer" })
 map('n', '<S-h>', ':bprevious<CR>', { desc = "Previous buffer" })
+map('n', '<leader>q', ':bdelete<CR>', opts)
+map('n', '<leader><tab>', ':buffer #<CR>', opts)
 
 -- Mover linhas
 map('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move line down' })
@@ -27,26 +36,30 @@ map('i', '<C-a>', '<c-g>u<Esc>[s1z=`]a<c-g>u', {
 })
 
 -- Atalhos do VimTeX (prefixo \)
-map('n', '\\ll',  '<cmd>VimtexCompile<CR>', opts)        -- Compilar
-map('n', '\\lk',  '<cmd>VimtexStopCompile<CR>', opts)    -- Parar compilação
-map('n', '\\lv',  '<cmd>VimtexView<CR>', opts)           -- Abrir visualizador PDF
-map('n', '\\li',  '<cmd>VimtexCompileOutput<CR>', opts)  -- Mostrar log da compilação
-map('n', '\\le',  '<cmd>VimtexErrors<CR>', opts)         -- Abrir lista de erros
-map('n', '\\lc',  '<cmd>VimtexClean<CR>', opts)          -- Limpar auxiliares de compilação
-map('n', '\\lt',  '<cmd>VimtexTocToggle<CR>', opts)      -- Toggle table of contents
+map('n', '\\ll', '<cmd>VimtexCompile<CR>', opts)       -- Compilar
+map('n', '\\lk', '<cmd>VimtexStopCompile<CR>', opts)   -- Parar compilação
+map('n', '\\lv', '<cmd>VimtexView<CR>', opts)          -- Abrir visualizador PDF
+map('n', '\\li', '<cmd>VimtexCompileOutput<CR>', opts) -- Mostrar log da compilação
+map('n', '\\le', '<cmd>VimtexErrors<CR>', opts)        -- Abrir lista de erros
+map('n', '\\lc', '<cmd>VimtexClean<CR>', opts)         -- Limpar auxiliares de compilação
+map('n', '\\lt', '<cmd>VimtexTocToggle<CR>', opts)     -- Toggle table of contents
 
 -- Navegação em LaTeX
-map('n', ']]', '<cmd>VimtexNextEnv<CR>', opts)           -- Próximo ambiente LaTeX
-map('n', '[[', '<cmd>VimtexPrevEnv<CR>', opts)           -- Ambiente anterior
-map('n', ']m', '<cmd>VimtexNextSection<CR>', opts)       -- Próxima seção
-map('n', '[m', '<cmd>VimtexPrevSection<CR>', opts)       -- Seção anterior
+map('n', ']]', '<cmd>VimtexNextEnv<CR>', opts)     -- Próximo ambiente LaTeX
+map('n', '[[', '<cmd>VimtexPrevEnv<CR>', opts)     -- Ambiente anterior
+map('n', ']m', '<cmd>VimtexNextSection<CR>', opts) -- Próxima seção
+map('n', '[m', '<cmd>VimtexPrevSection<CR>', opts) -- Seção anterior
 
 -- Ajuda rápida para comando LaTeX sob cursor
 map('n', 'K', '<cmd>VimtexDocPackage<CR>', opts)
 
--- bufferline
-map('n', '<leader>l', ':bnext<CR>', opts)
-map('n', '<leader>h', ':bprev<CR>', opts)
-map('n', '<leader>q', ':bdelete<CR>', opts)
-map('n', '<leader><tab>', ':buffer #<CR>', opts)
 
+vim.cmd [[
+" Use Tab to expand and jump through snippets
+imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'
+smap <silent><expr> <Tab> luasnip#jumpable(1) ? '<Plug>luasnip-jump-next' : '<Tab>'
+
+" Use Shift-Tab to jump backwards through snippets
+imap <silent><expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<S-Tab>'
+smap <silent><expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<S-Tab>'
+]]
